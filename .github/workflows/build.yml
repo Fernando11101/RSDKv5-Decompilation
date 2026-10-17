@@ -32,17 +32,42 @@ jobs:
         with:
           submodules: recursive
       - name: Install dependencies
-        run: vcpkg install libtheora libogg --triplet=x86-windows-static
+        run: vcpkg install libtheora libogg glew glfw3 sdl2 vulkan --triplet=x86-windows-static
       - name: Build RSDKv5 + U
         run: |
-          cmake -B build_v5 ${{env.GENERAL_FLAGS}} ${{env.GENERAL_WIN_FLAGS}} ${{env.WIN32_FLAGS}} ${{env.V5_FLAGS}}
-          cmake --build build_v5 --parallel --config Release
-          cmake -B build_v5U ${{env.GENERAL_FLAGS}} ${{env.GENERAL_WIN_FLAGS}} ${{env.WIN32_FLAGS}} ${{env.V5U_FLAGS}}
-          cmake --build build_v5U --parallel --config Release
+          cmake -B build_v5_dx9 ${{env.GENERAL_FLAGS}} ${{env.GENERAL_WIN_FLAGS}} ${{env.WIN32_FLAGS}} ${{env.V5_FLAGS}}
+          cmake --build build_v5_dx9 --parallel --config Release
+          cmake -B build_v5U_dx9 ${{env.GENERAL_FLAGS}} ${{env.GENERAL_WIN_FLAGS}} ${{env.WIN32_FLAGS}} ${{env.V5U_FLAGS}}
+          cmake --build build_v5U_dx9 --parallel --config Release
+          cmake -B build_v5_dx11 ${{env.GENERAL_FLAGS}} ${{env.GENERAL_WIN_FLAGS}} ${{env.WIN32_FLAGS}} ${{env.V5_FLAGS}} -DRETRO_SUBSYSTEM=DX11
+          cmake --build build_v5_dx11 --parallel --config Release
+          cmake -B build_v5U_dx11 ${{env.GENERAL_FLAGS}} ${{env.GENERAL_WIN_FLAGS}} ${{env.WIN32_FLAGS}} ${{env.V5U_FLAGS}} -DRETRO_SUBSYSTEM=DX11
+          cmake --build build_v5U_dx11 --parallel --config Release
+          cmake -B build_v5_ogl ${{env.GENERAL_FLAGS}} ${{env.GENERAL_WIN_FLAGS}} ${{env.WIN32_FLAGS}} ${{env.V5_FLAGS}} -DRETRO_SUBSYSTEM=OGL
+          cmake --build build_v5_ogl --parallel --config Release
+          cmake -B build_v5U_ogl ${{env.GENERAL_FLAGS}} ${{env.GENERAL_WIN_FLAGS}} ${{env.WIN32_FLAGS}} ${{env.V5U_FLAGS}} -DRETRO_SUBSYSTEM=OGL
+          cmake --build build_v5U_ogl --parallel --config Release
+          cmake -B build_v5_sdl2 ${{env.GENERAL_FLAGS}} ${{env.GENERAL_WIN_FLAGS}} ${{env.WIN32_FLAGS}} ${{env.V5_FLAGS}} -DRETRO_SUBSYSTEM=SDL2
+          cmake --build build_v5_sdl2 --parallel --config Release
+          cmake -B build_v5U_sdl2 ${{env.GENERAL_FLAGS}} ${{env.GENERAL_WIN_FLAGS}} ${{env.WIN32_FLAGS}} ${{env.V5U_FLAGS}} -DRETRO_SUBSYSTEM=SDL2
+          cmake --build build_v5U_sdl2 --parallel --config Release
+          cmake -B build_v5_vk ${{env.GENERAL_FLAGS}} ${{env.GENERAL_WIN_FLAGS}} ${{env.WIN32_FLAGS}} ${{env.V5_FLAGS}} -DRETRO_SUBSYSTEM=VK
+          cmake --build build_v5_vk --parallel --config Release
+          cmake -B build_v5U_vk ${{env.GENERAL_FLAGS}} ${{env.GENERAL_WIN_FLAGS}} ${{env.WIN32_FLAGS}} ${{env.V5U_FLAGS}} -DRETRO_SUBSYSTEM=VK
+          cmake --build build_v5U_vk --parallel --config Release
       - name: Move artifacts
         run: |
           mkdir artifacts
-          mv ./build_*/Release/*.exe ./artifacts
+          mv ./build_v5_dx9/Release/RSDKv5.exe ./artifacts/RSDKv5_dx9.exe
+          mv ./build_v5U_dx9/Release/RSDKv5U.exe ./artifacts/RSDKv5U_dx9.exe
+          mv ./build_v5_dx11/Release/RSDKv5.exe ./artifacts/RSDKv5_dx11.exe
+          mv ./build_v5U_dx11/Release/RSDKv5U.exe ./artifacts/RSDKv5U_dx11.exe
+          mv ./build_v5_ogl/Release/RSDKv5.exe ./artifacts/RSDKv5_ogl.exe
+          mv ./build_v5U_ogl/Release/RSDKv5U.exe ./artifacts/RSDKv5U_ogl.exe
+          mv ./build_v5_sdl2/Release/RSDKv5.exe ./artifacts/RSDKv5_sdl2.exe
+          mv ./build_v5U_sdl2/Release/RSDKv5U.exe ./artifacts/RSDKv5U_sdl2.exe
+          mv ./build_v5_vk/Release/RSDKv5.exe ./artifacts/RSDKv5_vk.exe
+          mv ./build_v5U_vk/Release/RSDKv5U.exe ./artifacts/RSDKv5U_vk.exe
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -56,17 +81,42 @@ jobs:
         with:
           submodules: recursive
       - name: Install dependencies
-        run: vcpkg install libtheora libogg --triplet=x64-windows-static
+        run: vcpkg install libtheora libogg glew glfw3 sdl2 vulkan --triplet=x64-windows-static
       - name: Build RSDKv5 + U
         run: |
-          cmake -B build_v5 ${{env.GENERAL_FLAGS}} ${{env.GENERAL_WIN_FLAGS}} ${{env.WIN64_FLAGS}} ${{env.V5_FLAGS}}
-          cmake --build build_v5 --parallel --config Release
-          cmake -B build_v5U ${{env.GENERAL_FLAGS}} ${{env.GENERAL_WIN_FLAGS}} ${{env.WIN64_FLAGS}} ${{env.V5U_FLAGS}}
-          cmake --build build_v5U --parallel --config Release
+          cmake -B build_v5_dx9 ${{env.GENERAL_FLAGS}} ${{env.GENERAL_WIN_FLAGS}} ${{env.WIN64_FLAGS}} ${{env.V5_FLAGS}}
+          cmake --build build_v5_dx9 --parallel --config Release
+          cmake -B build_v5U_dx9 ${{env.GENERAL_FLAGS}} ${{env.GENERAL_WIN_FLAGS}} ${{env.WIN64_FLAGS}} ${{env.V5U_FLAGS}}
+          cmake --build build_v5U_dx9 --parallel --config Release
+          cmake -B build_v5_dx11 ${{env.GENERAL_FLAGS}} ${{env.GENERAL_WIN_FLAGS}} ${{env.WIN64_FLAGS}} ${{env.V5_FLAGS}} -DRETRO_SUBSYSTEM=DX11
+          cmake --build build_v5_dx11 --parallel --config Release
+          cmake -B build_v5U_dx11 ${{env.GENERAL_FLAGS}} ${{env.GENERAL_WIN_FLAGS}} ${{env.WIN64_FLAGS}} ${{env.V5U_FLAGS}} -DRETRO_SUBSYSTEM=DX11
+          cmake --build build_v5U_dx11 --parallel --config Release
+          cmake -B build_v5_ogl ${{env.GENERAL_FLAGS}} ${{env.GENERAL_WIN_FLAGS}} ${{env.WIN64_FLAGS}} ${{env.V5_FLAGS}} -DRETRO_SUBSYSTEM=OGL
+          cmake --build build_v5_ogl --parallel --config Release
+          cmake -B build_v5U_ogl ${{env.GENERAL_FLAGS}} ${{env.GENERAL_WIN_FLAGS}} ${{env.WIN64_FLAGS}} ${{env.V5U_FLAGS}} -DRETRO_SUBSYSTEM=OGL
+          cmake --build build_v5U_ogl --parallel --config Release
+          cmake -B build_v5_sdl2 ${{env.GENERAL_FLAGS}} ${{env.GENERAL_WIN_FLAGS}} ${{env.WIN64_FLAGS}} ${{env.V5_FLAGS}} -DRETRO_SUBSYSTEM=SDL2
+          cmake --build build_v5_sdl2 --parallel --config Release
+          cmake -B build_v5U_sdl2 ${{env.GENERAL_FLAGS}} ${{env.GENERAL_WIN_FLAGS}} ${{env.WIN64_FLAGS}} ${{env.V5U_FLAGS}} -DRETRO_SUBSYSTEM=SDL2
+          cmake --build build_v5U_sdl2 --parallel --config Release
+          cmake -B build_v5_vk ${{env.GENERAL_FLAGS}} ${{env.GENERAL_WIN_FLAGS}} ${{env.WIN64_FLAGS}} ${{env.V5_FLAGS}} -DRETRO_SUBSYSTEM=VK
+          cmake --build build_v5_vk --parallel --config Release
+          cmake -B build_v5U_vk ${{env.GENERAL_FLAGS}} ${{env.GENERAL_WIN_FLAGS}} ${{env.WIN64_FLAGS}} ${{env.V5U_FLAGS}} -DRETRO_SUBSYSTEM=VK
+          cmake --build build_v5U_vk --parallel --config Release
       - name: Move artifacts
         run: |
           mkdir artifacts
-          mv ./build_*/Release/*.exe ./artifacts
+          mv ./build_v5_dx9/Release/RSDKv5.exe ./artifacts/RSDKv5_dx9.exe
+          mv ./build_v5U_dx9/Release/RSDKv5U.exe ./artifacts/RSDKv5U_dx9.exe
+          mv ./build_v5_dx11/Release/RSDKv5.exe ./artifacts/RSDKv5_dx11.exe
+          mv ./build_v5U_dx11/Release/RSDKv5U.exe ./artifacts/RSDKv5U_dx11.exe
+          mv ./build_v5_ogl/Release/RSDKv5.exe ./artifacts/RSDKv5_ogl.exe
+          mv ./build_v5U_ogl/Release/RSDKv5U.exe ./artifacts/RSDKv5U_ogl.exe
+          mv ./build_v5_sdl2/Release/RSDKv5.exe ./artifacts/RSDKv5_sdl2.exe
+          mv ./build_v5U_sdl2/Release/RSDKv5U.exe ./artifacts/RSDKv5U_sdl2.exe
+          mv ./build_v5_vk/Release/RSDKv5.exe ./artifacts/RSDKv5_vk.exe
+          mv ./build_v5U_vk/Release/RSDKv5U.exe ./artifacts/RSDKv5U_vk.exe
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -82,19 +132,32 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install libogg-dev libtheora-dev libglew-dev libglfw3-dev
-      - name: Build RSDKv5 + U OGL
+          sudo apt-get install libogg-dev libtheora-dev libglew-dev libglfw3-dev libsdl2-dev
+      - name: Build RSDKv5 + U
         run: |
-          cmake -B build_v5 ${{env.GENERAL_FLAGS}} ${{env.GENERAL_LINUX_FLAGS}} ${{env.V5_FLAGS}}
-          cmake --build build_v5 --parallel
-          cmake -B build_v5U ${{env.GENERAL_FLAGS}} ${{env.GENERAL_LINUX_FLAGS}} ${{env.V5U_FLAGS}}
-          cmake --build build_v5U --parallel
+          cmake -B build_v5_ogl ${{env.GENERAL_FLAGS}} ${{env.GENERAL_LINUX_FLAGS}} ${{env.V5_FLAGS}}
+          cmake --build build_v5_ogl --parallel
+          cmake -B build_v5U_ogl ${{env.GENERAL_FLAGS}} ${{env.GENERAL_LINUX_FLAGS}} ${{env.V5U_FLAGS}}
+          cmake --build build_v5U_ogl --parallel
+          cmake -B build_v5_sdl2 ${{env.GENERAL_FLAGS}} ${{env.GENERAL_LINUX_FLAGS}} ${{env.V5_FLAGS}} -DRETRO_SUBSYSTEM=SDL2
+          cmake --build build_v5_sdl2 --parallel
+          cmake -B build_v5U_sdl2 ${{env.GENERAL_FLAGS}} ${{env.GENERAL_LINUX_FLAGS}} ${{env.V5U_FLAGS}} -DRETRO_SUBSYSTEM=SDL2
+          cmake --build build_v5U_sdl2 --parallel
+          cmake -B build_v5_vk ${{env.GENERAL_FLAGS}} ${{env.GENERAL_LINUX_FLAGS}} ${{env.V5_FLAGS}} -DRETRO_SUBSYSTEM=VK
+          cmake --build build_v5_vk --parallel
+          cmake -B build_v5U_vk ${{env.GENERAL_FLAGS}} ${{env.GENERAL_LINUX_FLAGS}} ${{env.V5U_FLAGS}} -DRETRO_SUBSYSTEM=VK
+          cmake --build build_v5U_vk --parallel
       # tar the executables so that they don't lose exec permissions
       # see: https://github.com/actions/upload-artifact?tab=readme-ov-file#permission-loss
       - name: Move artifacts
         run: |
           mkdir artifacts
-          mv ./build_*/RSDKv5* ./artifacts
+          mv ./build_v5_ogl/RSDKv5 ./artifacts/RSDKv5_ogl
+          mv ./build_v5U_ogl/RSDKv5U ./artifacts/RSDKv5U_ogl
+          mv ./build_v5_sdl2/RSDKv5 ./artifacts/RSDKv5_sdl2
+          mv ./build_v5U_sdl2/RSDKv5U ./artifacts/RSDKv5U_sdl2
+          mv ./build_v5_vk/RSDKv5 ./artifacts/RSDKv5_vk
+          mv ./build_v5U_vk/RSDKv5U ./artifacts/RSDKv5U_vk
           tar -czvf linux.tar.gz -C ./artifacts .
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
