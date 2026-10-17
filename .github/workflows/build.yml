@@ -73,11 +73,37 @@ jobs:
           cmake --build build_v5_vk --parallel --config Release
           cmake -B build_v5U_vk ${{env.GENERAL_FLAGS}} ${{env.GENERAL_WIN_FLAGS}} ${{env.WIN32_FLAGS}} ${{env.V5U_FLAGS}} -DRETRO_SUBSYSTEM=VK
           cmake --build build_v5U_vk --parallel --config Release
+      - name: Bundle GLShaders mod
+        shell: cmd
+        run: |
+          mkdir -p artifacts\v5\mods\GLShaders\Data\Shaders
+          mkdir -p artifacts\v5U\mods\GLShaders\Data\Shaders
+          xcopy RSDKv5\Shaders\OGL artifacts\v5\mods\GLShaders\Data\Shaders\OGL /E /I /Y
+          xcopy RSDKv5\Shaders\OGL artifacts\v5U\mods\GLShaders\Data\Shaders\OGL /E /I /Y
+          (
+          echo Name=GLShaders
+          echo Description=OGLShaders
+          echo Author=Ducky
+          echo Version=1.0.0
+          echo TargetVersion=-1
+          ) > artifacts\v5\mods\GLShaders\mod.ini
+          (
+          echo Name=GLShaders
+          echo Description=OGLShaders
+          echo Author=Ducky
+          echo Version=1.0.0
+          echo TargetVersion=-1
+          ) > artifacts\v5U\mods\GLShaders\mod.ini
+          (
+          echo [Mods]
+          echo GLShaders=y
+          ) > artifacts\v5\mods\modconfig.ini
+          (
+          echo [Mods]
+          echo GLShaders=y
+          ) > artifacts\v5U\mods\modconfig.ini
       - name: Move artifacts
         run: |
-          mkdir artifacts
-          mkdir artifacts/v5
-          mkdir artifacts/v5U
           mv ./Sonic-Mania-Decompilation/build_v5/Release/Game.dll ./artifacts/v5/
           mv ./Sonic-Mania-Decompilation/build_v5U/Release/Game.dll ./artifacts/v5U/
           mv ./build_v5_dx9/Release/RSDKv5.exe ./artifacts/v5/RSDKv5_dx9.exe
@@ -147,11 +173,37 @@ jobs:
           cmake --build build_v5_vk --parallel --config Release
           cmake -B build_v5U_vk ${{env.GENERAL_FLAGS}} ${{env.GENERAL_WIN_FLAGS}} ${{env.WIN64_FLAGS}} ${{env.V5U_FLAGS}} -DRETRO_SUBSYSTEM=VK
           cmake --build build_v5U_vk --parallel --config Release
+      - name: Bundle GLShaders mod
+        shell: cmd
+        run: |
+          mkdir -p artifacts\v5\mods\GLShaders\Data\Shaders
+          mkdir -p artifacts\v5U\mods\GLShaders\Data\Shaders
+          xcopy RSDKv5\Shaders\OGL artifacts\v5\mods\GLShaders\Data\Shaders\OGL /E /I /Y
+          xcopy RSDKv5\Shaders\OGL artifacts\v5U\mods\GLShaders\Data\Shaders\OGL /E /I /Y
+          (
+          echo Name=GLShaders
+          echo Description=OGLShaders
+          echo Author=Ducky
+          echo Version=1.0.0
+          echo TargetVersion=-1
+          ) > artifacts\v5\mods\GLShaders\mod.ini
+          (
+          echo Name=GLShaders
+          echo Description=OGLShaders
+          echo Author=Ducky
+          echo Version=1.0.0
+          echo TargetVersion=-1
+          ) > artifacts\v5U\mods\GLShaders\mod.ini
+          (
+          echo [Mods]
+          echo GLShaders=y
+          ) > artifacts\v5\mods\modconfig.ini
+          (
+          echo [Mods]
+          echo GLShaders=y
+          ) > artifacts\v5U\mods\modconfig.ini
       - name: Move artifacts
         run: |
-          mkdir artifacts
-          mkdir artifacts/v5
-          mkdir artifacts/v5U
           mv ./Sonic-Mania-Decompilation/build_v5/Release/Game.dll ./artifacts/v5/
           mv ./Sonic-Mania-Decompilation/build_v5U/Release/Game.dll ./artifacts/v5U/
           mv ./build_v5_dx9/Release/RSDKv5.exe ./artifacts/v5/RSDKv5_dx9.exe
@@ -214,13 +266,20 @@ jobs:
           cmake --build build_v5_vk --parallel
           cmake -B build_v5U_vk ${{env.GENERAL_FLAGS}} ${{env.GENERAL_LINUX_FLAGS}} ${{env.V5U_FLAGS}} -DRETRO_SUBSYSTEM=VK
           cmake --build build_v5U_vk --parallel
+      - name: Bundle GLShaders mod
+        run: |
+          mkdir -p artifacts/v5/mods/GLShaders/Data/Shaders
+          mkdir -p artifacts/v5U/mods/GLShaders/Data/Shaders
+          cp -r RSDKv5/Shaders/OGL artifacts/v5/mods/GLShaders/Data/Shaders
+          cp -r RSDKv5/Shaders/OGL artifacts/v5U/mods/GLShaders/Data/Shaders
+          printf "Name=GLShaders\nDescription=OGLShaders\nAuthor=Ducky\nVersion=1.0.0\nTargetVersion=-1\n" > artifacts/v5/mods/GLShaders/mod.ini
+          printf "Name=GLShaders\nDescription=OGLShaders\nAuthor=Ducky\nVersion=1.0.0\nTargetVersion=-1\n" > artifacts/v5U/mods/GLShaders/mod.ini
+          printf "[Mods]\nGLShaders=y\n" > artifacts/v5/mods/modconfig.ini
+          printf "[Mods]\nGLShaders=y\n" > artifacts/v5U/mods/modconfig.ini
       # tar the executables so that they don't lose exec permissions
       # see: https://github.com/actions/upload-artifact?tab=readme-ov-file#permission-loss
       - name: Move artifacts
         run: |
-          mkdir artifacts
-          mkdir artifacts/v5
-          mkdir artifacts/v5U
           mv ./Sonic-Mania-Decompilation/build_v5/libGame.so ./artifacts/v5/
           mv ./Sonic-Mania-Decompilation/build_v5U/libGame.so ./artifacts/v5U/
           mv ./build_v5_ogl/RSDKv5 ./artifacts/v5/RSDKv5_ogl
